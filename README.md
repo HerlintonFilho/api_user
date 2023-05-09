@@ -1,8 +1,8 @@
-#API_USER
+# API_USER
 
-##Para que serve??
+## Para que serve??
 
-##Sistema de consulta utilizando API rest e NodeJS e suas bibliotecas, sendo a principal a biblioteca knex
+- Sistema de consulta utilizando API rest e NodeJS e suas bibliotecas, sendo a principal a biblioteca knex
 
 ### Dependências
 
