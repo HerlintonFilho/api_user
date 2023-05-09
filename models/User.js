@@ -2,6 +2,31 @@ const e = require("express");
 const knex = require("../database/connection");
 const bcrypt = require("bcrypt");
 class User{
+    async findAll(){
+        try{
+            var result = await knex.raw(`SELECT id, email, name, role FROM users`)
+            return result;
+        }catch(err){
+            console.log(err)
+            return [];
+        }
+    }
+
+    async findById(id){
+        try{
+            var result = await knex.raw(`SELECT id, email, name, role FROM users WHERE id = ${id}`)
+            console.log(result[0])
+            if(result.length > 0){
+                return result[0];
+            }else{
+                return undefined;
+            }
+        }catch(err){
+            console.log(err)
+            return undefined;
+        }
+    }
+
     async new(email, password, name){
         try{
             var hash = await bcrypt.hash(password, 10)
