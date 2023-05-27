@@ -107,6 +107,10 @@ class User{
             return {status: false, err: "Usuario inexistente"}
         }
     }
+    async changePassword(newPassword, id, token){
+        var hash = await bcrypt.hash(newPassword, 10);
+        await knex.update({password: hash}).where({id: id}).table("users")
+    }
 }
 
 module.exports = new User()
