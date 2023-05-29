@@ -1,6 +1,10 @@
 const User = require('../models/User');
 const PasswordToken = require("../models/PasswordToken")
 const { use } = require('../routes/routes');
+var jwt = require('jsonwebtoken')
+const bcrypt = require("bcrypt");
+
+var secret = "jfhasdfhaskdhaskdhlasjkzc"
 
 class UserController{
     async index(req, res){
@@ -99,6 +103,26 @@ class UserController{
         }
 
     }
+
+    async login(req, res){
+        var {email, password} = req.body
+        var user = await User.findByEmail(email)
+        if(user != undefined){
+            var resultado = await bcrypt.compare(password, user.password);
+            if(resultado){
+                var token = jwt.sign({ email: user.email, role: user.role}, secret);
+                res.status(200)
+                res.json({token: token})
+            }else{
+                res.send("Senha incorreta!!");
+                res.status(406);
+            }
+        }else{
+            res.send("Usuário não encontrado!!");
+            res.json({status: false});
+        }
+    }
+
 }
 
 module.exports = new UserController();

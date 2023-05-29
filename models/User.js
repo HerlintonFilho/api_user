@@ -1,6 +1,7 @@
 const e = require("express");
 const knex = require("../database/connection");
 const bcrypt = require("bcrypt");
+const PasswordToken = require("./PasswordToken");
 class User{
     async findAll(){
         try{
@@ -28,7 +29,7 @@ class User{
     }
     async findByEmail(email){
         try{
-            var result = await knex.select(["id", "email", "role", "name"]).where({email: email}).table("users")
+            var result = await knex.select(["id", "email","password", "role", "name"]).where({email: email}).table("users")
             if(result.length > 0){
                 return result[0];
             }else{
@@ -110,6 +111,7 @@ class User{
     async changePassword(newPassword, id, token){
         var hash = await bcrypt.hash(newPassword, 10);
         await knex.update({password: hash}).where({id: id}).table("users")
+        await PasswordToken.setUsed(token);
     }
 }
 
